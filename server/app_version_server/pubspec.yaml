@@ -1,0 +1,34 @@
+name: app_version_server
+description: A sample command-line application.
+version: 1.0.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  shelf: any
+  shelf_router: any
+  shelf_static: any
+  shelf_multipart: any
+  mime: any
+
+  # Выберите одну из БД (примеры):
+  sqlite3: any # Для SQLite
+  # # или
+  # postgres: any # Для PostgreSQL
+  # # или
+  # mongo_dart: any # Для MongoDB
+  
+  # Дополнительные утилиты
+  crypto: any # Для хеширования паролей
+  dotenv: any # Для работы с .env файлами
+  uuid: any # Для генерации UUID
+  path: any
+
+  meta: any
+
+dev_dependencies:
+  lints: any
+  test: any
+  flutter_lints: any
+  dart_code_metrics: any

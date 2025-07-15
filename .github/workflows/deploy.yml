@@ -1,0 +1,48 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+      version:
+        description: 'Version number'
+        required: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      # Setup Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      
+      # Install dependencies
+      - run: flutter pub get
+      
+      # Linting step
+      - name: Run Dart Analysis
+        run: flutter analyze
+      
+      # Formatting check
+      - name: Check Formatting
+        run: dart format --output=none --set-exit-if-changed .
+      
+      # Build steps
+      - name: Build Android APK
+        run: flutter build apk --release
+      
+      - name: Build Web
+        run: flutter build web --release
+      
+      # Deploy using your script
+      - name: Deploy Builds
+        run: bash scripts/deploy_builds.sh ${{ secrets.PROJECT_ID }} ${{ secrets.VERSION }} ${{ secrets.SERVER_URL }}

@@ -1,0 +1,40 @@
+name: version_app
+description: "Version controller, archive from flutter application"
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # firebase_core: any
+  # cloud_firestore: any
+  # firebase_storage: any
+  file_picker: any
+  url_launcher: any
+  fluttertoast: any
+
+  supabase: any
+  supabase_flutter: any
+  # postgrest: any
+  http: any
+  http_parser: any
+  dio: any
+  universal_html: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+  dart_code_metrics: any
+
+flutter:
+  uses-material-design: true
+  # plugins:
+  #   file_picker:
+  #     platforms:
+  #       android:
+  #       ios:
+  #       web:

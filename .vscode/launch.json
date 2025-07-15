@@ -1,0 +1,63 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "App (dev)",
+            "request": "launch",
+            "type": "dart",
+            "program": "./lib/main.dart",
+            "args": []
+        },
+        {
+            "name": "App (release)",
+            "request": "launch",
+            "type": "dart",
+            "program": "./lib/main.dart",
+            "args": [
+                "--release"
+            ]
+        },
+        {
+            "name": "Flutter Web Mac/Windows - (disable CORS)",
+            "request": "launch",
+            "type": "dart",
+            "program": "./lib/main.dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-browser-flag=--disable-web-security",
+                "--web-browser-flag=--user-data-dir=C:\\temp\\chrome_test"
+            ]
+        },
+        {
+            "name": "Flutter Web (Chrome)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "./lib/main.dart",
+            "deviceId": "chrome",
+            "args": [
+                "--web-port=5000"
+            ]
+        },
+        {
+            "name": "Flutter Web (Safari)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "deviceId": "chrome", // Flutter не поддерживает 'safari', но порт будет общим
+            "args": [
+                "--web-port=5000"
+            ],
+            "postDebugTask": "open-in-safari" // Доп. задача для автоматического открытия в Safari
+        }
+    ],
+    "tasks": {
+        "open-in-safari": {
+            "label": "open-in-safari",
+            "type": "shell",
+            "command": "open http://localhost:5000",
+            "isBackground": true
+        }
+    }
+}

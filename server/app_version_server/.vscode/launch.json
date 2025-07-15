@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "App (dev)",
+            "request": "launch",
+            "type": "dart",
+            "program": "./bin/app_version_server.dart",
+            "args": []
+        },
+        {
+            "name": "App (release)",
+            "request": "launch",
+            "type": "dart",
+            "program": "./bin/app_version_server.dart",
+            "args": [
+                "--release"
+            ]
+        }
+    ]
+}
