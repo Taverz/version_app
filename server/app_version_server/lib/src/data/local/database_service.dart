@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_version_server/src/models/version_model.dart';
 import 'package:path/path.dart';
 import 'package:sqlite3/sqlite3.dart';
 
@@ -195,6 +196,41 @@ class DatabaseService {
         map['platforms'] = jsonDecode(map['platforms'] as String);
         return map;
       }).toList();
+    } finally {
+      stmt.dispose();
+    }
+  }
+
+  VersionApp? getLastVersionByProjectId(int projectId) {
+    final stmt = db.prepare('''
+    SELECT * FROM versions 
+    WHERE projectId = ?
+    ORDER BY createdAt DESC
+    LIMIT 1
+  ''');
+    try {
+      final result = stmt.select([projectId]);
+      final resultValue = result.isEmpty
+          ? null
+          : _rowToVersionMap(result.first);
+      return resultValue == null ? null : VersionApp.fromMap(resultValue);
+    } finally {
+      stmt.dispose();
+    }
+  }
+
+  VersionApp? getVersionByProjectId(int projectId, String versionId) {
+    final stmt = db.prepare('''
+    SELECT * FROM versions 
+    WHERE projectId = ? AND id = ?
+    LIMIT 1
+  ''');
+    try {
+      final result = stmt.select([projectId, versionId]);
+      final resultValue = result.isEmpty 
+          ? null 
+          : _rowToVersionMap(result.first);
+      return resultValue == null ? null : VersionApp.fromMap(resultValue);
     } finally {
       stmt.dispose();
     }

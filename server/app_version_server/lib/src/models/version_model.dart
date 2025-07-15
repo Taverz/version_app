@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 
 @immutable
-class Version {
+class VersionApp {
   final String id;
   final int projectId;
   final String versionName;
@@ -11,7 +11,7 @@ class Version {
   final String downloadURL;
   final DateTime createdAt;
 
-  const Version({
+  const VersionApp({
     required this.id,
     required this.projectId,
     required this.versionName,
@@ -20,8 +20,8 @@ class Version {
     required this.createdAt,
   });
 
-  factory Version.fromMap(Map<String, dynamic> map) {
-    return Version(
+  factory VersionApp.fromMap(Map<String, dynamic> map) {
+    return VersionApp(
       id: map['id'] as String,
       projectId: map['projectId'] as int,
       versionName: map['versionName'] as String,
@@ -46,7 +46,7 @@ class Version {
     };
   }
 
-  Version copyWith({
+  VersionApp copyWith({
     String? id,
     int? projectId,
     String? versionName,
@@ -54,7 +54,7 @@ class Version {
     String? downloadURL,
     DateTime? createdAt,
   }) {
-    return Version(
+    return VersionApp(
       id: id ?? this.id,
       projectId: projectId ?? this.projectId,
       versionName: versionName ?? this.versionName,

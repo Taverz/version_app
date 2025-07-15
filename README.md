@@ -33,3 +33,12 @@
 ## 📄 Лицензия
 
 Подробности см. в файле [LICENSE](LICENSE).
+
+## Alternative
+
+- [Apkpure](https://apkpure.com/)
+- [Softportal](https://www.softportal.com/)
+- [Flathub](https://flathub.org/)
+- [F-Droid](https://f-droid.org/)
+- [Google Play](https://play.google.com/)
+- [Microsoft Store](https://www.microsoft.com/en-us/p/)

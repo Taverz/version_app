@@ -1,16 +1,27 @@
 # version_controller
 
-A new Flutter project.
+## Platform
 
-## Getting Started
+- Android
 
-This project is a starting point for a Flutter application.
+## OTA-обновления
 
-A few resources to get you started if this is your first Flutter project:
+[Docs Google Android](https://source.android.com/docs/core/ota?hl=ru)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Системные обновления без A/B
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Docs Google Android](https://source.android.com/docs/core/ota/nonab?hl=ru)
+
+***Платформы для Enterprise: Microsoft Intune, MobileIron***
+
+```text
+Ваше приложение → Проверяет API → Скачивает APK → Устанавливает
+          ↑
+       Сервер (хранит APK + версии)
+```
+
+### Description
+
+- Google Play Policy: Приложения из Google Play не могут использовать OTA (нарушение политики).
+- Подпись APK: Все обновления должны быть подписаны тем же ключом, что и исходное приложение.
+- Версия Android: На Android 8+ требуются дополнительные разрешения для доступа к файлам.

@@ -6,6 +6,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  pub_semver: any
   shelf: any
   shelf_router: any
   shelf_static: any

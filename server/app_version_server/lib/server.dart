@@ -24,22 +24,31 @@ class CustomServer
   CustomServer({required this.port, required this.storagePath});
 
   Future<void> start() async {
-    final router = Router();
+    final router = Router()
 
     // Projects API
-    router.get('/projects', getAllProjects);
-    router.post('/projects', createProject);
-    router.get('/projects/<id>', getProject);
-    router.put('/projects/<id>', updateProject);
-    router.delete('/projects/<id>', deleteProject);
+    ..get('/projects', getAllProjects)
+    ..post('/projects', createProject)
+    ..get('/projects/<id>', getProject)
+    ..put('/projects/<id>', updateProject)
+    ..delete('/projects/<id>', deleteProject)
     // Versions API
-    router.get('/versions/<projectId>', getVersions);
-    router.delete('/versions/<versionId>', deleteVersion);
-    router.post('/versions', uploadVersion);
+    ..get('/versions/<projectId>', getVersions)
+    ..delete('/versions/<versionId>', deleteVersion)
+    ..post('/versions', uploadVersion)
     // File API
-    router.post('/download', handleFileDownload);
+    ..post('/download', handleFileDownload)
+    //  'status': 'OK',
+    //       'last-version': lastVersion.versionName,
+    //       'versionId': lastVersion.id,
+    //       'version': lastVersion.toMap(),
+    //       'needUpdate': true,
+    //       'availableUpdate': false,
+    //       'reinstallNeed': false,
+    ..get('/checkUpdate/<projectId>/<currentVersion>', checkUpdate)
+    ..post('/download/<projectId>/<versionId>', handleFileDownloadByProjectIdByVersion);
 
-    final handler = Pipeline()
+    final handler = const Pipeline()
         .addMiddleware(logRequests())
         .addMiddleware(handleCors)
         /// NO WORKED / NEED FIX
@@ -51,7 +60,7 @@ class CustomServer
         //     responseBody: true,
         //   ).middleware,
         // )
-        .addHandler(router);
+        .addHandler(router.call);
 
     await io.serve(handler, '0.0.0.0', port);
     log(' 💥 Server running on port $port 🌈 ');

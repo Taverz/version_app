@@ -9,9 +9,70 @@ import 'package:app_version_server/src/mappers/version_mappers.dart';
 import 'package:app_version_server/src/models/version_model.dart';
 import 'package:app_version_server/src/utils/file_until.dart';
 import 'package:mime/mime.dart';
+import 'package:pub_semver/pub_semver.dart' as version_parse;
 import 'package:shelf/shelf.dart';
 
 mixin VersionHandler on FileUntil, VersionMapper {
+  /// ### GET - /checkUpdate/$projectId/$currentVersion (currentVersion - version install on client)
+  /// #### Result request, Map, contains parameter:
+  /// * last-version: (1.2.3+32-beta/1.2.3)
+  /// * needUpdate: (true/false)
+  /// * availableUpdate: (true/false)
+  /// * reinstallNeed: (true/false) - major update / minor update (reinstall - delete application before install new version)
+  Response checkUpdate(
+    Request request,
+    String projectId,
+    String currentVersion,
+  ) {
+    log(
+      '''Check update for project $projectId with current version $currentVersion''',
+    );
+
+    final lastVersion = DatabaseService().getLastVersionByProjectId(
+      int.parse(projectId),
+    );
+    if (lastVersion == null) {
+      return Response.ok(
+        jsonEncode({
+          'status': 'not found',
+          'last-version': null,
+          'versionId': null,
+          'version': null,
+          'needUpdate': false,
+          'availableUpdate': false,
+          'reinstallNeed': false,
+        }),
+      );
+    }
+    final currentSemVer = version_parse.Version.parse(currentVersion);
+    final lastSemVer = version_parse.Version.parse(lastVersion.versionName);
+    if (currentSemVer > lastSemVer) {
+      return Response.ok(
+        jsonEncode({
+          'status': 'OK',
+          'last-version': lastVersion.versionName,
+          'versionId': lastVersion.id,
+          'version': lastVersion.toMap(),
+          'needUpdate': true,
+          'availableUpdate': false,
+          'reinstallNeed': false,
+        }),
+      );
+    } else {
+      return Response.ok(
+        jsonEncode({
+          'status': 'OK',
+          'last-version': lastVersion.versionName,
+          'versionId': lastVersion.id,
+          'version': lastVersion.toMap(),
+          'needUpdate': false,
+          'availableUpdate': false,
+          'reinstallNeed': false,
+        }),
+      );
+    }
+  }
+
   Future<Response> getVersions(Request request, String projectId) async {
     try {
       final pid = int.tryParse(projectId);
@@ -75,6 +136,7 @@ mixin VersionHandler on FileUntil, VersionMapper {
   Future<Response> uploadVersion(Request request) async {
     try {
       final storageDir = Directory('storage');
+      // ignore: avoid_slow_async_io
       if (!await storageDir.exists()) {
         await storageDir.create(recursive: true);
       }
@@ -132,6 +194,7 @@ mixin VersionHandler on FileUntil, VersionMapper {
       }
 
       final versionsDir = Directory('storage/versions');
+      // ignore: avoid_slow_async_io
       if (!await versionsDir.exists()) {
         await versionsDir.create(recursive: true);
       }
@@ -143,7 +206,7 @@ mixin VersionHandler on FileUntil, VersionMapper {
 
       final db = DatabaseService();
       final versionId = DateTime.now().millisecondsSinceEpoch.toString();
-      final versionData = Version(
+      final versionData = VersionApp(
         id: versionId,
         projectId: int.parse(projectId),
         versionName: versionName,
@@ -162,7 +225,7 @@ mixin VersionHandler on FileUntil, VersionMapper {
       }
 
       return Response.ok(
-        jsonEncode({"result": versionData.toMap(), "status": "success"}),
+        jsonEncode({'result': versionData.toMap(), 'status': 'success'}),
         headers: {'Content-Type': 'application/json'},
       );
     } catch (e, stackTrace) {
